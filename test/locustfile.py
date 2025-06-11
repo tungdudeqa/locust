@@ -62,7 +62,7 @@ class fluctuatingLoadShape(LoadTestShape):
         self.min_users = randint(10, 30)
         self.max_users = randint(100, 300)
         self.cycle_time = randint(5, 60)
-        print(f"[Wave Params] min: {self.min_users}, max: {self.max_users}, cycle: {self.cycle_time}s")
+        logger.info(f"[Wave Params] min: {self.min_users}, max: {self.max_users}, cycle: {self.cycle_time}s")
 
     def tick(self):
         run_time = self.get_run_time()
