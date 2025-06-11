@@ -57,3 +57,19 @@ Edit `test/locustfile.py` to change user behavior or test endpoints.
 `make server` — Start the server only
 
 `make locust` — Run Locust tests only
+
+`make test-add-pkg PKG={your_packages}` - Install python package for the test directory
+
+#### Using Docker
+
+1. Build the image
+
+```sh
+make docker-build
+```
+
+2. Run
+
+```sh
+make docker-locust
+```
