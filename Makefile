@@ -2,6 +2,13 @@ SERVER_DIR=app
 TEST_DIR=test
 VENV=$(TEST_DIR)/.venv
 LOCUST=$(VENV)/bin/locust
+mnu ?= 10
+mxu ?= 300
+ct ?= 30
+spr ?= 10
+trt ?= 30
+ui ?= 5
+worker ?= 4
 
 server:
 	cd $(SERVER_DIR) && bun start
@@ -32,10 +39,13 @@ docker-build:
 
 docker-locust:
 	docker run -p 8089:8089  \
-	-e MIN_USERS=10 \
-	-e MAX_USERS=200 \
-	-e CYCLE_TIME=60 \
-  	-e SPAWN_RATE=20 \
-	-e TOTAL_RUN_TIME=30 \
-	-e UPDATE_INTERVAL=2 \
-  	my-locust -f /mnt/locust/test/locustfile.py --host http://host.docker.internal:3001
+	-e MIN_USERS=$(mxu) \
+	-e MAX_USERS=$(mnu) \
+	-e CYCLE_TIME=$(ct) \
+  	-e SPAWN_RATE=$(spr) \
+	-e TOTAL_RUN_TIME=$(trt) \
+	-e UPDATE_INTERVAL=$(ui) \
+  	my-locust -f /mnt/locust/test/locustfile.py --host http://host.docker.internal:3001 --csv=results/perf
+
+compose-locust:
+	MIN_USERS=$(mnu) MAX_USERS=$(mxu) CYCLE_TIME=$(ct) SPAWN_RATE=$(spr) TOTAL_RUN_TIME=$(trt) UPDATE_INTERVAL=$(ui) docker-compose up --scale worker=$(worker) ; docker-compose down

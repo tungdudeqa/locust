@@ -73,3 +73,11 @@ make docker-build
 ```sh
 make docker-locust
 ```
+
+##### Extra: Docker compose
+
+Can specify parameters and number of workers
+
+```sh
+make compose-locust
+```

@@ -1,26 +1,27 @@
-version: '3'
+x-locust-env: &locust-env
+  MIN_USERS: ${MIN_USERS:-10}
+  MAX_USERS: ${MAX_USERS:-300}
+  CYCLE_TIME: ${CYCLE_TIME:-30}
+  SPAWN_RATE: ${SPAWN_RATE:-10}
+  TOTAL_RUN_TIME: ${TOTAL_RUN_TIME:-30}
+  UPDATE_INTERVAL: ${UPDATE_INTERVAL:-5}
+
 services:
   master:
     image: my-locust
     ports:
       - "8089:8089"
     environment:
-      - LOCUST_MODE=master
-      - MIN_USERS=10
-      - MAX_USERS=300
-      - CYCLE_TIME=30
-      - SPAWN_RATE=10
+      <<: *locust-env
+      LOCUST_MODE: master
     command: >
-      -f /mnt/locust/test/locustfile.py --host http://host.docker.internal:3001 --master
+      -f /mnt/locust/test/locustfile.py --host http://host.docker.internal:3001 --csv=results/perf --master
 
   worker:
     image: my-locust
     environment:
-      - LOCUST_MODE=worker
-      - MIN_USERS=10
-      - MAX_USERS=300
-      - CYCLE_TIME=30
-      - SPAWN_RATE=10
+      <<: *locust-env
+      LOCUST_MODE: worker
     command: >
       -f /mnt/locust/test/locustfile.py --host http://host.docker.internal:3001 --worker --master-host master
     depends_on:
